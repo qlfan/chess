@@ -10,8 +10,12 @@ class Pawn(Piece, pygame.sprite.Sprite):
         Piece.__init__(self, 'Pawn', row, col, player, board)
         self.groups = [board.all_sprites]
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image = pygame.image.load(path.join(image_location, "white_pawn.png"))
-        self.rect = self.image.get_rect()
+        if player.piece_color == "white":
+            self.image = pygame.image.load(path.join(image_location, "white_pawn.png"))
+            self.rect = self.image.get_rect()
+        if player.piece_color == "black":
+            self.image = pygame.image.load(path.join(image_location, "black_pawn.png"))
+            self.rect = self.image.get_rect()
     
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 

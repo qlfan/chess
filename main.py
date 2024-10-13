@@ -5,7 +5,17 @@ import pygame
 
 pygame.init()
 
+player1 = Player("Player 1", "white", 0)
+player2 = Player("Player 2", "black", 0)
+
+def config(board: Board, player1: Player, player2: Player):
+    for i in range(8):
+        board.board[6][i] = Pawn(6, i, player1, board)
+        board.board[1][i] = Pawn(1, i, player2, board)
+
 board = baseClasses.Board()
+
+config(board, player1, player2)
 
 for i in range(8):
     for j in range(8):
@@ -16,7 +26,7 @@ for i in range(8):
 
 pygame.display.flip()
 
-board.board[6][0] = Pawn(6, 0, None, board)
+#board.board[6][0] = Pawn(6, 0, None, board)
 
 board.display_board()
 
