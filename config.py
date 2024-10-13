@@ -1,0 +1,9 @@
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+TAN = (219, 180, 145)
+BROWN = (143, 101, 63)
+
+WIDTH = 800
+HEIGHT = 800
+FPS = 30
+TITLE = "Chess"
