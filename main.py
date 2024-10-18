@@ -16,6 +16,11 @@ def config(board: Board, player1: Player, player2: Player):
     board.board[7][0], board.board[7][7] = Rook(7, 0, player1, board), Rook(7, 7, player1, board)
     board.board[0][0], board.board[0][7] = Rook(0, 0, player2, board), Rook(0, 7, player2, board)
 
+    #bishop code goes here
+
+    board.board[7][1], board.board[7][1] = Knight(7, 1, player1, board), Knight(7, 1, player1, board)
+    board.board[0][1], board.board[0][1] = Knight(0, 1, player2, board), Knight(0, 1, player2, board)
+
 board = baseClasses.Board()
 
 config(board, player1, player2)

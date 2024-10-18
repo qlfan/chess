@@ -63,10 +63,17 @@ class Bishop(Piece):
         
         return False
 
-class Knight(Piece):
+class Knight(Piece, pygame.sprite.Sprite):
     def __init__(self, row: int, col: int, player: Player, board: Board):
-        super().__init__('Knight', row, col, player, board)
-    
+        Piece.__init__(self, 'Knight', row, col, player, board)
+        self.groups = [board.all_sprites]
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        if player.piece_color == "white":
+            self.image = pygame.image.load(path.join(image_location, "white_knight.png"))
+            self.rect = self.image.get_rect()
+        if player.piece_color == "black":
+            self.image = pygame.image.load(path.join(image_location, "black_knight.png"))
+
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check for L shaped patterns
