@@ -4,7 +4,7 @@ from config import *
 import pygame
 
 pygame.init()
-
+#
 player1 = Player("Player 1", "white", 0)
 player2 = Player("Player 2", "black", 0)
 
