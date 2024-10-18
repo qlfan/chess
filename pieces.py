@@ -15,7 +15,6 @@ class Pawn(Piece, pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
         if player.piece_color == "black":
             self.image = pygame.image.load(path.join(image_location, "black_pawn.png"))
-            self.rect = self.image.get_rect()
     
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
@@ -33,9 +32,16 @@ class Pawn(Piece, pygame.sprite.Sprite):
         
         return False
     
-class Rook(Piece):
+class Rook(Piece, pygame.sprite.Sprite):
     def __init__(self, row: int, col: int, player: Player, board: Board):
-        super().__init__('Rook', row, col, player, board)
+        Piece.__init__(self, 'Rook', row, col, player, board)
+        self.groups = [board.all_sprites]
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        if player.piece_color == "white":
+            self.image = pygame.image.load(path.join(image_location, "white_rook.png"))
+            self.rect = self.image.get_rect()
+        if player.piece_color == "black":
+            self.image = pygame.image.load(path.join(image_location, "black_rook.png"))
 
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 

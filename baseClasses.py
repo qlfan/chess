@@ -48,10 +48,10 @@ class Board:
                     lower_y = piece.row * HEIGHT / 8
                     upper_y = (piece.row + 1) * HEIGHT / 8
                     y_diff = (upper_y - lower_y - 64) / 2
-
-                    match piece_type:
-                        case 'Pawn':
-                            self.screen.blit(piece.image, (lower_x + x_diff, lower_y + y_diff))
+                    self.screen.blit(piece.image, (lower_x + x_diff, lower_y + y_diff))
+                    # match piece_type:
+                    #     case 'Pawn':
+                    #         self.screen.blit(piece.image, (lower_x + x_diff, lower_y + y_diff))
 
 
 
