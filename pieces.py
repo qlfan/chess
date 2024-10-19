@@ -51,9 +51,16 @@ class Rook(Piece, pygame.sprite.Sprite):
         
         return False
     
-class Bishop(Piece):
+class Bishop(Piece, pygame.sprite.Sprite):
     def __init__(self, row: int, col: int, player: Player, board: Board):
-        super().__init__('Bishop', row, col, player, board)
+        Piece.__init__(self, 'Bishop', row, col, player, board)
+        self.groups = [board.all_sprites]
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        if player.piece_color == "white":
+            self.image = pygame.image.load(path.join(image_location, "white_bishop.png"))
+            self.rect = self.image.get_rect()
+        if player.piece_color == "black":
+            self.image = pygame.image.load(path.join(image_location, "black_bishop.png"))
     
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
@@ -87,10 +94,17 @@ class Knight(Piece, pygame.sprite.Sprite):
         
         return False
     
-class Queen(Piece):
+class Queen(Piece,pygame.sprite.Sprite):
     def __init__(self, row: int, col: int, player: Player, board: Board):
-        super().__init__('Queen', row, col, player, board)
-    
+        Piece.__init__(self, 'Queen', row, col, player, board)
+        self.groups = [board.all_sprites]
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        if player.piece_color == "white":
+            self.image = pygame.image.load(path.join(image_location, "white_queen.png"))
+            self.rect = self.image.get_rect()
+        if player.piece_color == "black":
+            self.image = pygame.image.load(path.join(image_location, "black_queen.png"))
+
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check that the move ends in the same row or column
@@ -103,9 +117,16 @@ class Queen(Piece):
         
         return False
 
-class King(Piece):
+class King(Piece, pygame.sprite.Sprite):
     def __init__(self, row: int, col: int, player: Player, board: Board):
-        super().__init__('King', row, col, player, board)
+        Piece.__init__(self, 'King', row, col, player, board)
+        self.groups = [board.all_sprites]
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        if player.piece_color == "white":
+            self.image = pygame.image.load(path.join(image_location, "white_king.png"))
+            self.rect = self.image.get_rect()
+        if player.piece_color == "black":
+            self.image = pygame.image.load(path.join(image_location, "black_king.png"))
 
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
