@@ -32,12 +32,13 @@ board = baseClasses.Board()
 
 config(board, player1, player2)
 
-for i in range(8):
-    for j in range(8):
-        if (i + j) % 2 == 0:
-            pygame.draw.rect(board.screen, BROWN, pygame.Rect(i * WIDTH / 8, j * HEIGHT / 8, WIDTH / 8, HEIGHT / 8))
-        else:
-            pygame.draw.rect(board.screen, TAN, pygame.Rect(i * WIDTH / 8, j * HEIGHT / 8, WIDTH / 8, HEIGHT / 8))
+def draw_grid():
+    for i in range(8):
+        for j in range(8):
+            if (i + j) % 2 == 0:
+                pygame.draw.rect(board.screen, BROWN, pygame.Rect(i * WIDTH / 8, j * HEIGHT / 8, WIDTH / 8, HEIGHT / 8))
+            else:
+                pygame.draw.rect(board.screen, TAN, pygame.Rect(i * WIDTH / 8, j * HEIGHT / 8, WIDTH / 8, HEIGHT / 8))
 
 pygame.display.flip()
 
@@ -48,6 +49,7 @@ pygame.display.flip()
 #clock = pygame.time.Clock()
 
 running = True
+stored_row, stored_col = -1, -1
 
 while running:
     pygame.display.flip()
@@ -58,11 +60,39 @@ while running:
         #Check for left mouse button input
         elif event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:
             pos = pygame.mouse.get_pos()
-            
-            #Find which square the player clicked
-            row, col = int(pos[1] // (HEIGHT / 8)), int(pos[0] // (WIDTH / 8))
-            print(f"It is {board.is_occupied(row, col)} that {row}, {col} is occupied")
 
+            #Find which square the player clicked
+            if stored_row == -1 and stored_col == -1:
+                stored_row, stored_col = int(pos[1] // (HEIGHT / 8)), int(pos[0] // (WIDTH / 8))
+                if board.is_occupied(stored_row, stored_col):
+                    selected_piece = board.board[stored_row][stored_col]
+            
+            #Equivalent to checking if a piece is selected
+            elif stored_row != -1 and stored_col != -1:
+                new_row, new_col = int(pos[1] // (HEIGHT / 8)), int(pos[0] // (WIDTH / 8))
+
+                #This is a pretty ugly implementation I might make this more modular
+                if board.board[stored_row][stored_col] != None:
+                    if board.board[stored_row][stored_col].is_valid_move(stored_row, stored_col, new_row, new_col):
+                        #Verify that a piece can be captured if attempting to move to an occupied square
+                        if board.is_occupied(new_row, new_col):
+                            if board.board[new_row][new_col].player.piece_color != board.board[stored_row][stored_col].player.piece_color:
+                                board.board[stored_row][stored_col].kill()
+                                board.move_piece(stored_row, stored_col, new_row, new_col)
+                                stored_row, stored_col = -1, -1
+                        else:
+                            board.board[stored_row][stored_col].kill()
+                            board.move_piece(stored_row, stored_col, new_row, new_col)
+                            stored_row, stored_col = -1, -1
+                    else:
+                        stored_row, stored_col = -1, -1   
+                stored_row, stored_col = -1, -1 
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                print(stored_row, stored_col)
+
+    draw_grid()
     board.draw()
     pygame.display.flip()
 

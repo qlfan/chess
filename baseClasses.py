@@ -24,6 +24,9 @@ class Board:
     #Moves a piece to a new square
     def move_piece(self, current_row: int, current_col: int, new_row: int, new_col: int) -> None:
         self.board[new_row][new_col] = self.board[current_row][current_col]
+        self.board[new_row][new_col].row = new_row
+        self.board[new_row][new_col].col = new_col
+        self.board[new_row][new_col].move_count += 1
         self.remove_piece(current_row, current_col)
     
     #Removes a piece from the board
@@ -61,7 +64,8 @@ class Piece:
         self.piece_type = piece_type
         self.col = col
         self.row = row
-        self.player = Player
+        self.player = player
+        self.board = board
         self.move_count = 0
 
     #Moves a piece to a new square if its path is valid

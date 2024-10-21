@@ -19,16 +19,32 @@ class Pawn(Piece, pygame.sprite.Sprite):
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check if player attempts to move up 2 squares
-        if (self.move_count == 0) and (new_row == current_row + 2) and (new_col == current_col):
-            return True
+        if self.player.piece_color == "white":
+            if (self.move_count == 0) and (new_row == current_row - 2) and (new_col == current_col):
+                return True
+        
+        if self.player.piece_color == "black":
+            if (self.move_count == 0) and (new_row == current_row + 2) and (new_col == current_col):
+                return True
         
         #Check if player attempts to move up 1 square
-        elif (new_row == current_row + 1) and (new_col == current_col):
-            return True
+        if self.player.piece_color == "white":
+            if (new_row == current_row - 1) and (new_col == current_col):
+                return True
+
+        if self.player.piece_color == "black":
+            if (new_row == current_row + 1) and (new_col == current_col):
+                return True
+            
         
         #Check if player attempts to capture diagonally
-        elif (self.board.is_occupied(new_row, new_col)) and (new_row == current_row + 1) and (abs(new_col - current_col) == 1):
-            return True
+        if self.player.piece_color == "white":
+            if (self.board.is_occupied(new_row, new_col)) and (new_row == current_row - 1) and (abs(new_col - current_col) == 1):
+                return True
+            
+        if self.player.piece_color == "black":
+            if (self.board.is_occupied(new_row, new_col)) and (new_row == current_row + 1) and (abs(new_col - current_col) == 1):
+                return True
         
         return False
     
@@ -65,7 +81,7 @@ class Bishop(Piece, pygame.sprite.Sprite):
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check if move is diagonal
-        if (new_row != current_row) and (new_col != current_col):
+        if (abs(new_row - current_row) == abs(new_col - current_col)):
             return True
         
         return False
@@ -84,12 +100,12 @@ class Knight(Piece, pygame.sprite.Sprite):
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check for L shaped patterns
-        if (abs(new_row - current_row) == 2) and (abs(new_col - current_col == 1)):
+        if (abs(new_row - current_row) == 2) and (abs(new_col - current_col) == 1):
             return True
         
         #this is the ugliest comment of all time lol
-        #Check for |¯¯¯  shapped patterns
-        if (abs(new_row - current_row) == 1) and (abs(new_col - current_col == 2)):
+        #Check for |¯¯¯¯  shapped patterns
+        if (abs(new_row - current_row) == 1) and (abs(new_col - current_col) == 2):
             return True
         
         return False
@@ -108,11 +124,11 @@ class Queen(Piece,pygame.sprite.Sprite):
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check that the move ends in the same row or column
-        if (new_row == current_row) or (new_col == current_col):
+        if ((new_row == current_row) and (new_col != current_col)) or ((new_col == current_col) and (new_row != current_row)):
             return True
         
         #Check if move is diagonal
-        if (new_row != current_row) and (new_col != current_col):
+        if (abs(new_row - current_row) == abs(new_col - current_col)):
             return True
         
         return False
@@ -131,4 +147,6 @@ class King(Piece, pygame.sprite.Sprite):
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
 
         #Check that move is only one tile away
-        pass
+        if (abs(new_row - current_row) <= 1) and (abs(new_col - current_col) <= 1):
+            return True
+        return False
