@@ -29,11 +29,11 @@ class Pawn(Piece, pygame.sprite.Sprite):
         
         #Check if player attempts to move up 1 square
         if self.player.piece_color == "white":
-            if (new_row == current_row - 1) and (new_col == current_col):
+            if (new_row == current_row - 1) and (new_col == current_col) and not(self.board.is_occupied(new_row, new_col)):
                 return True
 
         if self.player.piece_color == "black":
-            if (new_row == current_row + 1) and (new_col == current_col):
+            if (new_row == current_row + 1) and (new_col == current_col) and not(self.board.is_occupied(new_row, new_col)):
                 return True
             
         
@@ -122,10 +122,13 @@ class Queen(Piece,pygame.sprite.Sprite):
             self.image = pygame.image.load(path.join(image_location, "black_queen.png"))
 
     def is_valid_move(self, current_row: int, current_col: int, new_row: int, new_col: int) -> bool:
-
-        #Check that the move ends in the same row or column
-        if ((new_row == current_row) and (new_col != current_col)) or ((new_col == current_col) and (new_row != current_row)):
-            return True
+        #Check if move ends in the same row
+        if ((new_row == current_row) and (new_col != current_col)):
+            return self.board.is_valid_path(current_row, current_col, new_row, new_col, "horizontal")
+        
+        #Check if move ends in the same column
+        if ((new_col == current_col) and (new_row != current_row)):
+            return self.board.is_valid_path(current_row, current_col, new_row, new_col, "vertical")
         
         #Check if move is diagonal
         if (abs(new_row - current_row) == abs(new_col - current_col)):

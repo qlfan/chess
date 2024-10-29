@@ -13,6 +13,7 @@ class Board:
         self.board = [[None] * 8 for i in range(8)]
         self.all_sprites = pygame.sprite.Group()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.turn_color = "white"
     
     #Displays the board in text
     def display_board(self) -> None:
@@ -52,10 +53,46 @@ class Board:
                     upper_y = (piece.row + 1) * HEIGHT / 8
                     y_diff = (upper_y - lower_y - 64) / 2
                     self.screen.blit(piece.image, (lower_x + x_diff, lower_y + y_diff))
-                    # match piece_type:
-                    #     case 'Pawn':
-                    #         self.screen.blit(piece.image, (lower_x + x_diff, lower_y + y_diff))
-
+    
+    def is_turn(self, player: Player) -> bool:
+        if player.piece_color == self.turn_color:
+            return True
+    
+    def switch_turn(self) -> None:
+        if self.turn_color == "white":
+            self.turn_color = "black"
+        
+        else:
+            self.turn_color = "white"
+    
+    def is_valid_path(self, current_row: int, current_col: int, new_row: int, new_col: int, move_type: str) -> bool:
+        if move_type == "vertical":
+            #Check if final tile is above current tile
+            if new_row < current_row:
+                for i in range(1, abs(new_row - current_row)):
+                    if self.is_occupied(current_row - i, new_col):
+                        return False
+                return True
+            
+            else:
+                for i in range(1, abs(new_row - current_row)):
+                    if self.is_occupied(current_row + i, new_col):
+                        return False
+                return True
+            
+        elif move_type == "horizontal":
+            #Check if final tile is left of current tile
+            if new_col < current_col:
+                for i in range(1, abs(new_col - current_col)):
+                    if self.is_occupied(new_row, current_col - i):
+                        return False
+                return True
+            
+            else:
+                for i in range(1, abs(new_col - current_col)):
+                    if self.is_occupied(new_row, current_col + i):
+                        return False
+                return True
 
 
 #Generic piece class

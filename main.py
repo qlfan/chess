@@ -74,26 +74,33 @@ while running:
                 #This is a pretty ugly implementation I might make this more modular
                 if board.board[stored_row][stored_col] != None:
                     if board.board[stored_row][stored_col].is_valid_move(stored_row, stored_col, new_row, new_col):
-                        #Verify that a piece can be captured if attempting to move to an occupied square
-                        if board.is_occupied(new_row, new_col):
-                            if board.board[new_row][new_col].player.piece_color != board.board[stored_row][stored_col].player.piece_color:
+                        if board.is_turn(board.board[stored_row][stored_col].player):
+                            #Verify that a piece can be captured if attempting to move to an occupied square
+                            if board.is_occupied(new_row, new_col):
+                                if board.board[new_row][new_col].player.piece_color != board.board[stored_row][stored_col].player.piece_color:
+                                    board.board[stored_row][stored_col].kill()
+                                    board.move_piece(stored_row, stored_col, new_row, new_col)
+                                    board.switch_turn()
+                            else:
                                 board.board[stored_row][stored_col].kill()
                                 board.move_piece(stored_row, stored_col, new_row, new_col)
-                                stored_row, stored_col = -1, -1
-                        else:
-                            board.board[stored_row][stored_col].kill()
-                            board.move_piece(stored_row, stored_col, new_row, new_col)
-                            stored_row, stored_col = -1, -1
-                    else:
-                        stored_row, stored_col = -1, -1   
+                                board.switch_turn()
+
                 stored_row, stored_col = -1, -1 
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 print(stored_row, stored_col)
+                
 
     draw_grid()
     board.draw()
+
+    #DELETE THIS ONCE TURNS ARE VERIFIED TO WORK
+    if board.turn_color == "white":
+        pygame.draw.rect(board.screen, WHITE, pygame.Rect(WIDTH/2, HEIGHT/2, 20, 20))
+    if board.turn_color == "black":
+        pygame.draw.rect(board.screen, BLACK, pygame.Rect(WIDTH/2, HEIGHT/2, 20, 20))
     pygame.display.flip()
 
 pygame.display.quit()
